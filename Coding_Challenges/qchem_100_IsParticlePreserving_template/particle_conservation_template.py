@@ -18,7 +18,9 @@ def binary_list(m, n):
 
     arr = []
     # QHACK #
-
+    m_bin = bin(m)[2:].zfill(n)
+    for bit in m_bin:
+        arr.append(int(bit))
     # QHACK #
     return arr
 
@@ -37,7 +39,8 @@ def basis_states(n):
     arr = []
 
     # QHACK #
-
+    for m in range(2**n):
+        arr.append(binary_list(m, n))
     # QHACK #
 
     return arr
@@ -56,7 +59,13 @@ def is_particle_preserving(circuit, n):
     """
 
     # QHACK #
-
+    final_state = circuit(binary_list(0, n))
+    num_of_particles = sum(final_state)
+    for state in basis_states(n):
+        final_state = circuit(state)
+        if sum(final_state) != num_of_particles:
+            return False
+    return True
     # QHACK #
 
 

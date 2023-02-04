@@ -30,6 +30,30 @@ def n_swaps(cnot):
 
     # QHACK #
 
+    start = cnot.wires[0]
+    end = cnot.wires[1]
+
+    # Dijkstra's algorithm
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    visited = set()
+    while len(visited) < len(graph):
+        current_node = min(
+            [(node, distance) for node, distance in distances.items() if node not in visited],
+            key=lambda x: x[1]
+        )[0]
+        if current_node == end:
+            break
+        for neighbor in graph[current_node]:
+            distance = distances[current_node] + 1
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+        visited.add(current_node)
+    
+
+    print(distances)
+
+    return (distances[end] -1)*2
     # QHACK #
 
 

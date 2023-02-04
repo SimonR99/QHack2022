@@ -1,7 +1,7 @@
 import sys
 import pennylane as qml
 from pennylane import numpy as np
-
+#from matplotlib import pyplot as plt
 
 def deutsch_jozsa(oracle):
     """This function will determine whether an oracle defined by a function f is constant or balanced.
@@ -22,21 +22,41 @@ def deutsch_jozsa(oracle):
         # QHACK #
 
         # Insert any pre-oracle processing here
+        qml.Hadamard(wires=0)
+        qml.Hadamard(wires=1)
+
+        qml.PauliX(wires=2)
+        qml.Hadamard(wires=2)
 
         oracle()  # DO NOT MODIFY this line
 
         # Insert any post-oracle processing here
+        qml.Hadamard(wires=0)
+        qml.Hadamard(wires=1)
+        
+
 
         # QHACK #
+        
 
         return qml.sample(wires=range(2))
 
     sample = circuit()
-
+    
+    #fig, ax = qml.draw_mpl(circuit)()
+    #plt.show()
     # QHACK #
 
     # From `sample` (a single call to the circuit), determine whether the function is constant or balanced.
+    # Return the appropriate string.
+    print(sample)    
 
+    state = "constant"
+    for i in sample:
+        if i == 1:
+            state = "balanced"
+    
+    return state
     # QHACK #
 
 
