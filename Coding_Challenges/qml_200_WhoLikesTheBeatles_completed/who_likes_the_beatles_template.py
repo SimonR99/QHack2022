@@ -39,16 +39,20 @@ def distance(A, B):
         qml.Hadamard(wires=0)
         qml.CSWAP(wires=range(3))
         qml.Hadamard(wires=0)
-        return qml.expval(qml.PauliZ(0))
+        return qml.probs(wires=0)
 
     #fig, ax = qml.draw_mpl(circuit)()
     #plt.show()
-    
-    value = circuit()
 
-    print(value)
+    # Convert the output of the circuit to a probability    
+    first_qubit_prob_0 = circuit()[0]
 
-    return value
+    # Return the distance
+    projection = np.sqrt(2*first_qubit_prob_0 - 1)
+
+    distance = np.sqrt(2*(1-projection))
+
+    return distance
 
 
     # QHACK #

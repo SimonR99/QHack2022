@@ -17,10 +17,17 @@ def binary_list(m, n):
     """
 
     arr = []
+
     # QHACK #
-    m_bin = bin(m)[2:].zfill(n)
-    for bit in m_bin:
-        arr.append(int(bit))
+    # Convert m to binary in a list of length n
+    for i in range(n):
+        arr.append(0)
+    
+    for i in range(n):
+        if m % 2 == 1:
+            arr[n - i - 1] = 1
+        m = m // 2
+
     # QHACK #
     return arr
 
@@ -39,13 +46,20 @@ def basis_states(n):
     arr = []
 
     # QHACK #
-    for m in range(2**n):
-        arr.append(binary_list(m, n))
+
+    # Create a list of all basis states for a circuit of n wires
+    for i in range(2**n):
+        arr.append(binary_list(i, n))
+
+    #print("arr: ", arr)
+    
+
+
     # QHACK #
 
     return arr
 
-
+import math
 def is_particle_preserving(circuit, n):
     """Given a circuit and its number of wires n, returns 1 if it preserves the number of particles, and 0 if it does not
 
@@ -59,11 +73,15 @@ def is_particle_preserving(circuit, n):
     """
 
     # QHACK #
-    final_state = circuit(binary_list(0, n))
-    num_of_particles = sum(final_state)
+    first_state = circuit(binary_list(0, n))
+    num_of_particles_first_state = sum(first_state**2)
     for state in basis_states(n):
-        final_state = circuit(state)
-        if sum(final_state) != num_of_particles:
+        test_state = circuit(state)
+        print()
+        print("first state: ", num_of_particles_first_state)
+        print("sum(test_state): ", sum(test_state**2))
+        print()
+        if sum(test_state**2) != num_of_particles_first_state:
             return False
     return True
     # QHACK #
