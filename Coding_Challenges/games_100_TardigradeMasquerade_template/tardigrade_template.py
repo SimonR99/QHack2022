@@ -27,6 +27,15 @@ def compute_entanglement(theta):
 
     # QHACK #
 
+    # Define the quantum circuit with no tardigrade
+    def circuit_no_tardigrade():
+        qml.Hadamard(wires=0)
+        qml.CNOT(wires=[0, 1])
+        qml.PauliX(wires=0)
+
+        
+
+
     # QHACK #
 
 

@@ -1,8 +1,10 @@
 #! /usr/bin/python3
 
+from locale import normalize
 import sys
 from pennylane import numpy as np
 import pennylane as qml
+from matplotlib import pyplot as plt
 
 
 def distance(A, B):
@@ -23,6 +25,31 @@ def distance(A, B):
 
     # dev = qml.device("default.qubit", ...
     # @qml.qnode(dev)
+
+    # Determine the number of qubits needed to represent the vectors
+    n_qubits = int(np.ceil(np.log2(max(max(A), max(B)))))
+
+
+    dev = qml.device("default.qubit", wires=3)
+    @qml.qnode(dev)
+    @qml.transforms.merge_amplitude_embedding
+    def circuit():
+        qml.templates.AmplitudeEmbedding(A, wires=1, normalize=True)
+        qml.templates.AmplitudeEmbedding(B, wires=2, normalize=True)
+        qml.Hadamard(wires=0)
+        qml.CSWAP(wires=range(3))
+        qml.Hadamard(wires=0)
+        return qml.expval(qml.PauliZ(0))
+
+    #fig, ax = qml.draw_mpl(circuit)()
+    #plt.show()
+    
+    value = circuit()
+
+    print(value)
+
+    return value
+
 
     # QHACK #
 

@@ -20,6 +20,8 @@ def oracle_matrix(indices):
 
     # QHACK #
 
+    
+
     # QHACK #
 
     return my_array

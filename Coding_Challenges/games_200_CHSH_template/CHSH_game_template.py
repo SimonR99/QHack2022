@@ -19,6 +19,9 @@ def prepare_entangled(alpha, beta):
 
     # QHACK #
 
+    qml.Hadamard(wires=0)
+    qml.CNOT(wires=[0, 1])
+
     # QHACK #
 
 @qml.qnode(dev)

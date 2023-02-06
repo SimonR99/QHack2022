@@ -29,6 +29,10 @@ def generating_fourier_state(n_qubits, m):
 
         # Add the template of the statement with the angles passed as an argument.
 
+        for i in range(n_qubits):
+            qml.Hadamard(wires=i)
+            qml.RZ(angles[i], wires=i)  
+
         # QHACK #
 
         # We apply QFT^-1 to return to the computational basis.
@@ -47,14 +51,33 @@ def generating_fourier_state(n_qubits, m):
         # QHACK #
 
         # The return error should be smaller when the state m is more likely to be obtained.
+        # Calculate error
+        error = 0
 
+        # qml.probs = coefficients of the states
+        # [x|00>, x|01>, x|10>, x|11>]
+
+        # We want the probability of the state m to be 1
+        # and the rest to be 0
+
+        # To calculate the error, we will sum the absolute value of the difference
+        #print("probs: ", probs)
+        #print("n_qubits: ", n_qubits)
+        state = np.zeros(2**n_qubits)
+        state[m] = 1
+
+        error = np.sum(np.abs(state-probs))
+        
+        print("Error: ", error)
+
+        return error
         # QHACK #
 
     # This subroutine will find the angles that minimize the error function.
     # Do not modify anything from here.
 
     opt = qml.AdamOptimizer(stepsize=0.8)
-    epochs = 5000
+    epochs = 1000
 
     angles = np.zeros(n_qubits, requires_grad=True)
 
